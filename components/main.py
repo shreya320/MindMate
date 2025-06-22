@@ -1,4 +1,10 @@
 # app.py
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from dotenv import load_dotenv
+load_dotenv()
 
 import streamlit as st
 from journal_handler import save_entry
