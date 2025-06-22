@@ -1,51 +1,30 @@
 import os
-import requests
 from dotenv import load_dotenv
+import google.generativeai as genai
 
 load_dotenv()
-API_KEY = os.getenv("HUGGINGFACE_API_KEY")
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-API_URL = "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct"
-headers = {"Authorization": f"Bearer {API_KEY}"}
+model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 
 def generate_feedback(journal_text, mood):
+    print("📝 Journal text:", journal_text)
+    print("🎭 Mood:", mood)
+
     prompt = (
-        f"You are a kind and supportive assistant.\n"
-        f"A person wrote this journal entry:\n"
-        f"\"{journal_text}\"\n"
-        f"Their mood is {mood.lower()}.\n"
-        f"Write a short, emotionally supportive message in response."
+    f"You are a kind, supportive assistant. Respond to this journal entry in a tone that matches the user's mood. "
+    f"The user is feeling {mood.lower()} and wrote: '{journal_text}'"
     )
 
-    payload = {
-        "inputs": prompt,
-        "parameters": {
-            "max_new_tokens": 80,
-            "temperature": 0.7,
-            "top_p": 0.9,
-            "do_sample": True
-        }
-    }
 
     try:
-        response = requests.post(API_URL, headers=headers, json=payload)
-        response.raise_for_status()  # Raise error if status code is not 200
-        result = response.json()
+        print("💬 Sending prompt to Gemini...")
+        chat = model.start_chat()
+        response = chat.send_message(prompt)
+        print("✅ Gemini response received.")
 
-        print("📦 Raw result:", result)  # <–– ADD THIS for debug
-
-        if isinstance(result, list):
-            return result[0]["generated_text"].split(prompt)[-1].strip()
-        else:
-            print("⚠️ Unexpected format:", result)
-            return "Hmm... the AI couldn't respond right now. Try again later?"
-
-    except requests.exceptions.HTTPError as e:
-        print("❌ HTTP error:", e)
-        print("🔢 Response code:", response.status_code)
-        print("📄 Response text:", response.text)
-        return "Something went wrong with the AI response. Please try again later."
+        return response.text.strip()
 
     except Exception as e:
-        print("🔥 General error:", e)
-        return "An error occurred. Please try again."
+        print("🔥 Error:", e)
+        return "Something went wrong while generating feedback."

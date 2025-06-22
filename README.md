@@ -3,9 +3,9 @@ Let users journal their thoughts, get AI-generated comfort messages, track mood 
 
 things to focus on: 
 
-    make a basic frontend
+    <!-- make a basic frontend  -->
 
-    users can input their journals (mutliple times?)
+    users can input their journals (mutliple times?) ================
 
     they can ask for a prompt
     - can be refined to be based on moods
@@ -44,3 +44,31 @@ things to focus on:
 ├── journal_log.csv         ← journal entries get stored here
 ├── requirements.txt        ← Python libraries
 └── README.md               ← for IBM submission
+
+
+
+
+ Tier 1: Polish What’s Already Working
+<!-- Fix	What’s Wrong	What to Do
+🧠 Improve AI replies	Repeats journal text or feels too dry	Tweak prompt to FLAN-5 like:
+"Give a kind, short, empathetic message to someone who wrote this journal: ..." -->
+📊 Fix mood dashboard (0 chart)	Pie chart empty or chart = 0	In mood_dashboard.py, add:
+if mood_counts.empty: st.info("No mood data yet!") before plotting
+📅 Mood trend bar not showing?	May be grouping incorrectly	Ensure Timestamp column is parsed correctly with:
+df["Timestamp"] = pd.to_datetime(df["Timestamp"], errors='coerce')
+📝 Detect multi-emotions	Only shows POSITIVE / NEGATIVE	Replace sentiment pipeline with multi-emotion model (see below)
+
+🔹 Tier 2: Add Smart, Cool Stuff
+Feature	Description
+💬 Better emotion model	Use j-hartmann/emotion-english-distilroberta-base or bhadresh-savani/distilbert-base-uncased-emotion to get labels like joy, sadness, anger
+🌈 Mood-aware journaling prompts	If mood is sad → generate comforting writing prompt
+📈 Mood over time (line chart)	Show how mood changes across days/weeks
+📌 Word cloud or keyword summary	NLP summary of the past week’s most-used words
+🧘 If mood = sad → recommend music / TED talk	Auto-embed YouTube video or Spotify link if needed
+
+🔹 Tier 3: For Final Year Expansion
+Feature	Adds Wow Factor
+🧠 Mood forecasting	Use basic ML (e.g., logistic regression) to predict tomorrow’s mood
+🧵 Conversation bot	Let user talk to a GPT-style chatbot with memory of past feelings
+🔐 User login system	Optional: For saving private data
+⚠️ Ethical alerts	Flag journals with “danger” keywords like “I want to end it all” and show a helpline/resource

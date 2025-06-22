@@ -27,5 +27,23 @@ def show_dashboard(csv_file="journal_log.csv"):
         daily_moods.value_counts().sort_index().plot(kind='bar', ax=ax2)
         st.pyplot(fig2)
 
+
+        # Convert mood to score
+        mood_scores = {"POSITIVE": 1, "NEUTRAL": 0, "NEGATIVE": -1}
+        df["Timestamp"] = pd.to_datetime(df["Timestamp"])
+        df["Mood_Score"] = df["Mood"].map(mood_scores)
+
+        # Average mood score per day
+        daily_trend = df.groupby(df["Timestamp"].dt.date)["Mood_Score"].mean()
+
+        # Plotting the trendline
+        st.markdown("#### 📈 Mood Trend Over Time")
+        fig, ax = plt.subplots()
+        daily_trend.plot(kind='line', marker='o', ax=ax)
+        ax.set_ylabel("Mood Score")
+        ax.set_xlabel("Date")
+        ax.axhline(0, color='gray', linestyle='--', linewidth=0.5)
+        st.pyplot(fig)
+
     except FileNotFoundError:
         st.warning("Journal log not found. Add some entries first.")
