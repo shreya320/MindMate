@@ -1,39 +1,42 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components')))
-
-from dotenv import load_dotenv
-load_dotenv()
-
 import streamlit as st
-from components.journal_handler import save_entry
-from components.mood_analysis import analyze_sentiment
-from components.response import generate_feedback
-from components.prompt_generator import get_prompt
-st.set_page_config(page_title="MindMate Lite", layout="centered")
+from PIL import Image
 
+st.set_page_config(
+    page_title="MindMate Lite",
+    page_icon="🧠",
+    layout="centered",
+)
 
+# --- Banner or Visual ---
+st.image("image.jpeg", height=200)
 
-st.title("🧠 MindMate Lite")
-st.subheader("Your AI-powered emotional journaling assistant")
+# --- Title ---
+st.markdown("""
+<div style="text-align: center;">
+    <h1 style="font-size: 3em; margin-bottom: 0.2em;">🧠 MindMate Lite</h1>
+    <p style="font-size: 1.2em; color: #555;">Your AI-powered journaling companion for mental wellness</p>
+</div>
+""", unsafe_allow_html=True)
 
-# -- Journal Input Section --
-st.markdown("### ✍️ What's on your mind today?")
-user_input = st.text_area("Write your thoughts below:", height=200)
+# --- Divider ---
+st.markdown("---")
 
-if st.button("Submit Entry"):
-    if user_input.strip():
-        mood = analyze_sentiment(user_input)
-        ai_reply = generate_feedback(user_input, mood)
-        save_entry(user_input, mood, ai_reply)
-        st.success("Entry saved!")
-        st.markdown("### Response:")
-        st.write(ai_reply)
-        st.markdown(f"**Detected Mood:** `{mood}`")
-    else:
-        st.warning("Please write something before submitting.")
+# --- Features Section ---
+st.markdown("""
+### 🌟 What You Can Do:
+""")
+cols = st.columns(2)
+with cols[0]:
+    st.markdown("- 📝 Journal your thoughts")
+    st.markdown("- 💬 Get emotional insights")
+    st.markdown("- 📊 Track your mood")
 
-# -- Prompt Button --
-if st.button("Need a prompt?"):
-    st.markdown("### ✨ Journaling Prompt:")
-    st.write(get_prompt())
+with cols[1]:
+    st.markdown("- 🤗 Receive empathetic responses")
+    st.markdown("- 🌈 Discover gentle prompts")
+
+# --- CTA ---
+st.markdown("---")
+st.markdown("### ✨ Ready to begin your journey?")
+st.page_link("pages/1_Journaling.py", label="🧠 Start Journaling", icon="📝")
+
