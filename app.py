@@ -27,7 +27,7 @@ if st.button("Submit Entry"):
         ai_reply = generate_feedback(user_input, mood)
         save_entry(user_input, mood, ai_reply)
         st.success("Entry saved!")
-        st.markdown("### 🤖 AI Response:")
+        st.markdown("### Response:")
         st.write(ai_reply)
         st.markdown(f"**Detected Mood:** `{mood}`")
     else:
