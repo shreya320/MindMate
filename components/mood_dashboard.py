@@ -1,8 +1,10 @@
-# mood_dashboard.py
+# components/mood_dashboard.py
 
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
+import numpy as np
 
 def show_dashboard(csv_file="journal_log.csv"):
     try:
@@ -10,40 +12,78 @@ def show_dashboard(csv_file="journal_log.csv"):
         if df.empty:
             st.info("No data yet. Submit some journals to see your dashboard.")
             return
-        
-        # Pie chart
-        mood_counts = df["Mood"].value_counts()
-        st.markdown("#### 🥧 Mood Distribution")
-        fig1, ax1 = plt.subplots()
-        ax1.pie(mood_counts, labels=mood_counts.index, autopct='%1.1f%%', startangle=90)
-        ax1.axis('equal')
-        st.pyplot(fig1)
 
-        # Mood trend over time
         df["Timestamp"] = pd.to_datetime(df["Timestamp"])
-        daily_moods = df.groupby(df["Timestamp"].dt.date)["Mood"].apply(lambda x: x.value_counts().idxmax())
-        st.markdown("#### 📈 Mood Trend Over Time")
-        fig2, ax2 = plt.subplots()
-        daily_moods.value_counts().sort_index().plot(kind='bar', ax=ax2)
-        st.pyplot(fig2)
+        df["Date"] = df["Timestamp"].dt.date
 
+        # --- Bubble Chart ---
+        st.markdown("### 🫧 Emotion Bubble Chart")
 
-        # Convert mood to score
-        mood_scores = {"POSITIVE": 1, "NEUTRAL": 0, "NEGATIVE": -1}
-        df["Timestamp"] = pd.to_datetime(df["Timestamp"])
-        df["Mood_Score"] = df["Mood"].map(mood_scores)
+        mood_counts = df["Mood"].value_counts().reset_index()
+        mood_counts.columns = ["Mood", "Count"]
 
-        # Average mood score per day
-        daily_trend = df.groupby(df["Timestamp"].dt.date)["Mood_Score"].mean()
+        mood_colors = {
+            "joy": "#4CAF50", "sadness": "#2196F3", "anger": "#F44336",
+            "fear": "#9C27B0", "surprise": "#FF9800", "neutral": "#9E9E9E",
+            "disgust": "#795548"
+        }
 
-        # Plotting the trendline
-        st.markdown("#### 📈 Mood Trend Over Time")
-        fig, ax = plt.subplots()
-        daily_trend.plot(kind='line', marker='o', ax=ax)
-        ax.set_ylabel("Mood Score")
-        ax.set_xlabel("Date")
-        ax.axhline(0, color='gray', linestyle='--', linewidth=0.5)
-        st.pyplot(fig)
+        mood_counts["Color"] = mood_counts["Mood"].map(mood_colors).fillna("#607D8B")
+        mood_counts["x"] = np.random.rand(len(mood_counts))
+        mood_counts["y"] = np.random.rand(len(mood_counts))
+
+        bubble_fig = px.scatter(
+            mood_counts,
+            x="x",
+            y="y",
+            size="Count",
+            color="Mood",
+            color_discrete_map=mood_colors,
+            hover_name="Mood",
+            size_max=100,
+        )
+
+        bubble_fig.update_layout(
+            title="Most Frequent Emotions",
+            xaxis=dict(showgrid=False, showticklabels=False, zeroline=False),
+            yaxis=dict(showgrid=False, showticklabels=False, zeroline=False),
+            plot_bgcolor="white",
+            paper_bgcolor="white",
+            showlegend=False
+        )
+
+        st.plotly_chart(bubble_fig, use_container_width=True)
+
+        # --- Interactive Mood Trend Line Chart ---
+        st.markdown("### 📈 Mood Trend Over Time")
+
+        mood_scores = {
+            "joy": 2, "surprise": 1, "neutral": 0,
+            "sadness": -1, "fear": -1, "anger": -2, "disgust": -2
+        }
+        df["Mood_Score"] = df["Mood"].map(mood_scores).fillna(0)
+        daily_avg = df.groupby("Date")["Mood_Score"].mean().reset_index()
+
+        trend_fig = go.Figure()
+        trend_fig.add_trace(go.Scatter(
+            x=daily_avg["Date"],
+            y=daily_avg["Mood_Score"],
+            mode="lines+markers",
+            line=dict(color="royalblue", width=2),
+            marker=dict(size=8),
+            hovertemplate='Date: %{x}<br>Mood Score: %{y}<extra></extra>'
+        ))
+
+        trend_fig.update_layout(
+            title="Average Mood Score by Day",
+            xaxis_title="Date",
+            yaxis_title="Mood Score",
+            plot_bgcolor="white",
+            paper_bgcolor="white",
+            yaxis=dict(range=[-2.5, 2.5])
+        )
+
+        st.plotly_chart(trend_fig, use_container_width=True)
 
     except FileNotFoundError:
         st.warning("Journal log not found. Add some entries first.")

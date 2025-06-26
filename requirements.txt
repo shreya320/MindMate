@@ -8,3 +8,4 @@ pandas
 matplotlib
 torch
 python-dotenv
+seaborn

@@ -1,19 +1,18 @@
-# app.py
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components')))
 
 from dotenv import load_dotenv
 load_dotenv()
 
 import streamlit as st
-from journal_handler import save_entry
-from mood_analysis import analyze_sentiment
-from response import generate_feedback
-from prompt_generator import get_prompt
-from mood_dashboard import show_dashboard
-
+from components.journal_handler import save_entry
+from components.mood_analysis import analyze_sentiment
+from components.response import generate_feedback
+from components.prompt_generator import get_prompt
 st.set_page_config(page_title="MindMate Lite", layout="centered")
+
+
 
 st.title("🧠 MindMate Lite")
 st.subheader("Your AI-powered emotional journaling assistant")
@@ -38,8 +37,3 @@ if st.button("Submit Entry"):
 if st.button("Need a prompt?"):
     st.markdown("### ✨ Journaling Prompt:")
     st.write(get_prompt())
-
-# -- Dashboard --
-st.markdown("---")
-st.markdown("### 📊 Mood Dashboard")
-show_dashboard()

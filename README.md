@@ -72,3 +72,14 @@ Feature	Adds Wow Factor
 🧵 Conversation bot	Let user talk to a GPT-style chatbot with memory of past feelings
 🔐 User login system	Optional: For saving private data
 ⚠️ Ethical alerts	Flag journals with “danger” keywords like “I want to end it all” and show a helpline/resource
+
+
+
+
+
+[18-06-2025 14:04] shreya: MindMate: An AI-Powered Mental Health Companion with Sentiment Insights
+[18-06-2025 14:27] shreya: slightly unintuitive
+[18-06-2025 14:29] shreya: integrate the premium features
+[18-06-2025 14:29] shreya: have bubbles for feelings
+[18-06-2025 14:29] shreya: negative emotions have a certain colour of buble, and positive emotions have certain colours
+[18-06-2025 14:30] shreya: can provide a summary
