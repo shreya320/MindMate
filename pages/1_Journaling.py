@@ -1,4 +1,5 @@
 import sys
+import pandas as pd
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components')))
 
@@ -17,6 +18,44 @@ st.set_page_config(page_title="MindMate Lite", layout="centered")
 st.title("🧠 MindMate Lite")
 st.subheader("Your AI-powered emotional journaling assistant")
 
+
+# --- Prompt Button ---
+
+st.markdown("## ✨ Need a journaling prompt?")
+if "show_prompt" not in st.session_state:
+    st.session_state.show_prompt = False
+
+if st.button("📝 Need a prompt?"):
+    st.session_state.show_prompt = True
+
+if st.session_state.show_prompt:
+    mood_choice = st.selectbox(
+        "Choose your current mood (or leave as Default):",
+        ["Default", "joy", "sadness", "anger", "fear", "neutral", "surprise", "disgust"]
+    )
+
+    if mood_choice == "Default":
+        try:
+            df = pd.read_csv("journal_log.csv", names=["Timestamp", "Entry", "Mood", "AI_Response"])
+            if not df.empty:
+                last_entry = df.iloc[-1]["Entry"]
+                detected_mood = analyze_sentiment(last_entry)
+                prompt = get_prompt(detected_mood)
+             
+            else:
+                prompt = get_prompt()
+                st.warning("No journal entries found. Showing a general prompt.")
+        except FileNotFoundError:
+            prompt = get_prompt()
+            st.warning("Journal log not found. Showing a general prompt.")
+    else:
+        prompt = get_prompt(mood_choice)
+
+    st.markdown("### 💡 Prompt Suggestion:")
+    st.success(f"_{prompt}_")
+
+
+
 # -- Journal Input Section --
 st.markdown("### ✍️ What's on your mind today?")
 user_input = st.text_area("Write your thoughts below:", height=200)
@@ -33,7 +72,3 @@ if st.button("Submit Entry"):
     else:
         st.warning("Please write something before submitting.")
 
-# -- Prompt Button --
-if st.button("Need a prompt?"):
-    st.markdown("### ✨ Journaling Prompt:")
-    st.write(get_prompt())
