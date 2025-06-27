@@ -1,5 +1,3 @@
-# prompt_generator.py
-
 import random
 
 mood_prompts = {

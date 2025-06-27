@@ -9,17 +9,15 @@ st.set_page_config(
     layout="centered",
 )
 
-# --- Convert local image to base64 ---
 def get_base64_image(path):
     img = Image.open(path)
     buffered = BytesIO()
-    img.save(buffered, format="JPEG")  # or PNG if needed
+    img.save(buffered, format="JPEG") 
     img_bytes = buffered.getvalue()
     return base64.b64encode(img_bytes).decode()
 
 img_base64 = get_base64_image("image.jpeg")
 
-# --- Centered Banner ---
 st.markdown(
     f"""
     <div style="text-align: center;">
@@ -31,10 +29,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- Divider ---
 st.markdown("---")
 
-# --- Features Section ---
 st.markdown("### 🌟 What You Can Do:")
 cols = st.columns(2)
 with cols[0]:
@@ -45,7 +41,6 @@ with cols[1]:
     st.markdown("- 🤗 Receive empathetic responses")
     st.markdown("- 🌈 Discover gentle prompts")
 
-# --- CTA ---
 st.markdown("---")
 st.markdown("### ✨ Ready to begin your journey?")
 st.page_link("pages/1_Journaling.py", label="🧠 Start Journaling", icon="📝")

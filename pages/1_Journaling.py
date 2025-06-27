@@ -57,6 +57,7 @@ if st.session_state.show_prompt:
 
 
 # -- Journal Input Section --
+
 st.markdown("### ✍️ What's on your mind today?")
 user_input = st.text_area("Write your thoughts below:", height=200)
 

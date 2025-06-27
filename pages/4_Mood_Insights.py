@@ -9,7 +9,6 @@ import re
 
 st.set_page_config(page_title="🔍 Mood Insights", layout="wide")
 
-# --- Load Data ---
 try:
     df = pd.read_csv("journal_log.csv", names=["Timestamp", "Entry", "Mood", "AI_Response"])
     df["Timestamp"] = pd.to_datetime(df["Timestamp"], errors='coerce')
@@ -32,7 +31,8 @@ try:
 
         tab1, tab2, tab3 = st.tabs(["📈 Mood Forecast", "☁️ Word Cloud", "📊 Dominant Emotion Trend"])
 
-        # --- Mood Forecast + Safety Tab ---
+
+        # Tab 1:
         with tab1:
             st.subheader("📈 Predicted Mood for Tomorrow")
 

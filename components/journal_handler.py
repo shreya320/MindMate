@@ -1,5 +1,3 @@
-# journal_handler.py
-
 import csv
 from datetime import datetime
 

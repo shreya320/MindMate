@@ -14,15 +14,14 @@ def show_dashboard(csv_file="journal_log.csv"):
         df["Timestamp"] = pd.to_datetime(df["Timestamp"])
         df["Date"] = df["Timestamp"].dt.date
 
-        # --- Shared Styling ---
         mood_colors = {
-            "joy": "#FFD700",       # bright gold
-            "sadness": "#1E88E5",   # strong blue
-            "anger": "#E53935",     # bright red
-            "fear": "#8E24AA",      # purple
-            "surprise": "#FB8C00",  # orange
-            "neutral": "#757575",   # gray
-            "disgust": "#6D4C41"    # brown
+            "joy": "#FFD700",       
+            "sadness": "#1E88E5",   
+            "anger": "#E53935",    
+            "fear": "#8E24AA",      
+            "surprise": "#FB8C00",  
+            "neutral": "#757575",  
+            "disgust": "#6D4C41"   
         }
 
         font_style = dict(family="Arial", size=16, color="#212121")
@@ -71,7 +70,9 @@ def show_dashboard(csv_file="journal_log.csv"):
 
         st.plotly_chart(bubble_fig, use_container_width=True)
 
-               # --- Trend Line Chart by Entry Index ---
+
+
+        # --- Trend Line Chart by Entry Index ---
         st.markdown("### 📈 Mood Trend by Entry")
 
         mood_scores = {
@@ -138,17 +139,14 @@ def show_dashboard(csv_file="journal_log.csv"):
 
 
 
-                # --- Stacked Bar Chart: Emotion Breakdown Across All Days ---
+        # --- Stacked Bar Chart: Emotion Breakdown Across All Days ---
         st.markdown("### 📊 Daily Emotion Distribution")
 
-        # Prepare data: count of each mood per day
         mood_daily_counts = df.groupby(["Date", "Mood"]).size().reset_index(name="Count")
 
-        # Pivot to get moods as columns
         pivot_df = mood_daily_counts.pivot(index="Date", columns="Mood", values="Count").fillna(0)
         pivot_df = pivot_df.sort_index()  # Ensure dates are sorted
 
-        # Build stacked bar chart
         bar_fig = go.Figure()
         for mood in pivot_df.columns:
             bar_fig.add_trace(go.Bar(
