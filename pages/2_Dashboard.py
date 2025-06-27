@@ -1,7 +1,7 @@
 # pages/1_Dashboard.py
 
 import streamlit as st
-from mood_dashboard import show_dashboard
+from components.mood_dashboard import show_dashboard
 
 # Set page title and layout
 st.set_page_config(page_title="📊 Mood Dashboard", layout="centered")

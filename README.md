@@ -3,21 +3,21 @@ Let users journal their thoughts, get AI-generated comfort messages, track mood 
 
 
 ✅  CORE FEATURES
- Flashcard-style display for previous journal entries
-→ Flip-like UI showing mood, timestamp, and text
+ <!-- Flashcard-style display for previous journal entries
+→ Flip-like UI showing mood, timestamp, and text  ====================-->
 
  Mood-based resource recommendation (for low mood scores)
 → Embed music, TED talk, or a positive quote when score < -1
 
- Keyword summary / Word cloud of past week's entries
-→ Highlights emotional themes and frequent words
+ <!-- Keyword summary / Word cloud of past week's entries
+→ Highlights emotional themes and frequent words -->
 
- Ethical alert trigger on risky phrases
-→ Warn user and show mental health resources
+ <!-- Ethical alert trigger on risky phrases
+→ Warn user and show mental health resources -->
 
-✅ PREDICTION & ANALYSIS
+<!-- ✅ PREDICTION & ANALYSIS
  Mood forecasting (e.g., for tomorrow)
-→ Simple model using recent mood scores or trends
+→ Simple model using recent mood scores or trends -->
 
  Mental state timeline
 → Show daily mood score and dominant emotion for the past week
