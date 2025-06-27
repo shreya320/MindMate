@@ -6,7 +6,7 @@ import numpy as np
 
 def show_dashboard(csv_file="journal_log.csv"):
     try:
-        df = pd.read_csv(csv_file, names=["Timestamp", "Entry", "Mood", "AI_Response"])
+        df = pd.read_csv(csv_file, names=["Timestamp", "Entry", "Mood", "AI_Response"], skiprows=1)
         if df.empty:
             st.info("No data yet. Submit some journals to see your dashboard.")
             return
